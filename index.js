@@ -105,6 +105,11 @@ app.post("/users/courses/:courseId", userAuthentication, (req, res) => {
   }
 });
 
+app.get("/users/purchasedCourses", userAuthentication, (req, res) => {
+  // logic to view purchased courses
+  return res.json({ purchasedCourses: req.user.purchasedCourses });
+});
+
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
