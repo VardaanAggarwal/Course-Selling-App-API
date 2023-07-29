@@ -41,6 +41,12 @@ app.post("/admin/signup", (req, res) => {
   }
 });
 
+app.post("/admin/login", adminAuthentication, (req, res) => {
+  // logic to log in admin
+  // console.log(ADMINS);
+  return res.json({ message: "Login Successful" });
+});
+
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
