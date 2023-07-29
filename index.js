@@ -71,6 +71,18 @@ app.get("/admin/courses", adminAuthentication, (req, res) => {
   // logic to get all courses
   return res.json({ courses: COURSES });
 });
+// User routes
+app.post("/users/signup", (req, res) => {
+  // logic to sign up user
+  let user = req.body;
+  user.purchasedCourses = [];
+  if (USERS.find((u) => u.username === user.username)) {
+    return res.json({ message: "User already exists" });
+  } else {
+    USERS.push(user);
+    return res.json({ message: "User created" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
