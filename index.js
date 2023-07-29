@@ -67,6 +67,11 @@ app.put("/admin/courses/:courseId", adminAuthentication, (req, res) => {
   }
 });
 
+app.get("/admin/courses", adminAuthentication, (req, res) => {
+  // logic to get all courses
+  return res.json({ courses: COURSES });
+});
+
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
