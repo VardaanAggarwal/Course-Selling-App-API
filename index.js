@@ -93,6 +93,17 @@ app.get("/users/courses", userAuthentication, (req, res) => {
   // logic to list all courses
   return res.json({ courses: COURSES });
 });
+app.post("/users/courses/:courseId", userAuthentication, (req, res) => {
+  // logic to purchase a course
+  const courseId = parseInt(req.params.courseId);
+  const course = COURSES.find((c) => c.courseId === courseId);
+  if (course) {
+    req.user.purchasedCourses.push(course);
+    return res.json({ message: "Course purchased successfully" });
+  } else {
+    return res.status(404).json({ message: "course not found" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
