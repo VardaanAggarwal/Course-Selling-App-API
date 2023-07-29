@@ -46,6 +46,13 @@ app.post("/admin/login", adminAuthentication, (req, res) => {
   // console.log(ADMINS);
   return res.json({ message: "Login Successful" });
 });
+app.post("/admin/courses", adminAuthentication, (req, res) => {
+  // logic to create a course
+  let course = req.body;
+  let id = Date.now();
+  COURSES.push({ ...course, courseId: id });
+  return res.json({ message: "Course created successfully", courseId: id });
+});
 
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
