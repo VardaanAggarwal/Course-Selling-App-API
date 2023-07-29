@@ -84,6 +84,11 @@ app.post("/users/signup", (req, res) => {
   }
 });
 
+app.post("/users/login", userAuthentication, (req, res) => {
+  // logic to log in user
+  return res.json({ message: "Logged in successfully" });
+});
+
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
