@@ -89,6 +89,11 @@ app.post("/users/login", userAuthentication, (req, res) => {
   return res.json({ message: "Logged in successfully" });
 });
 
+app.get("/users/courses", userAuthentication, (req, res) => {
+  // logic to list all courses
+  return res.json({ courses: COURSES });
+});
+
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
