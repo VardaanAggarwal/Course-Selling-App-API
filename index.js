@@ -17,6 +17,18 @@ const adminAuthentication = (req, res, next) => {
   }
 };
 
+// User Authentication
+
+const userAuthentication = (req, res, next) => {
+  const { username, password } = req.headers;
+  if (USERS.find((a) => a.username === username && a.password === password)) {
+    req.user = USERS.find((a) => a.username === username);
+    next();
+  } else {
+    return res.json({ message: "Unauthorized" });
+  }
+};
+
 app.listen(PORT, () => {
   console.log("Server is listening on port 3000");
 });
