@@ -1,115 +1,21 @@
+require("dotenv").config();
 const express = require("express");
+const userRouter = require("./routes/user");
+const adminRouter = require("./routes/admin");
+const cors = require("cors");
 const app = express();
-const PORT = 3000;
+const { connectToDB } = require("./connection");
+app.use(cors());
 app.use(express.json());
 
-let ADMINS = [];
-let USERS = [];
-let COURSES = [];
-
-// Admin Authentication
-const adminAuthentication = (req, res, next) => {
-  const { username, password } = req.headers;
-  if (ADMINS.find((a) => a.username === username && a.password === password)) {
-    next();
-  } else {
-    return res.json({ message: "Unauthorized" });
-  }
-};
-
-// User Authentication
-
-const userAuthentication = (req, res, next) => {
-  const { username, password } = req.headers;
-  if (USERS.find((a) => a.username === username && a.password === password)) {
-    req.user = USERS.find((a) => a.username === username);
-    next();
-  } else {
-    return res.json({ message: "Unauthorized" });
-  }
-};
-
-// Admin routes
-app.post("/admin/signup", (req, res) => {
-  // logic to sign up admin
-  const { username, password } = req.body;
-  if (ADMINS.find((a) => a.username === username)) {
-    return res.json({ message: "Admin already exists." });
-  } else {
-    ADMINS.push({ username, password });
-    return res.json({ message: "Admin created successfully" });
-  }
-});
-
-app.post("/admin/login", adminAuthentication, (req, res) => {
-  // logic to log in admin
-  // console.log(ADMINS);
-  return res.json({ message: "Login Successful" });
-});
-app.post("/admin/courses", adminAuthentication, (req, res) => {
-  // logic to create a course
-  let course = req.body;
-  let id = Date.now();
-  COURSES.push({ ...course, courseId: id });
-  return res.json({ message: "Course created successfully", courseId: id });
-});
-
-app.put("/admin/courses/:courseId", adminAuthentication, (req, res) => {
-  const courseId = parseInt(req.params.courseId);
-  const course = COURSES.find((c) => c.courseId === courseId);
-  // console.log(COURSES);
-  if (course) {
-    Object.assign(course, req.body);
-    // console.log(COURSES);
-    res.json({ message: "Course updated successfully" });
-  } else {
-    res.status(404).json({ message: "Course not found" });
-  }
-});
-
-app.get("/admin/courses", adminAuthentication, (req, res) => {
-  // logic to get all courses
-  return res.json({ courses: COURSES });
-});
-// User routes
-app.post("/users/signup", (req, res) => {
-  // logic to sign up user
-  let user = req.body;
-  user.purchasedCourses = [];
-  if (USERS.find((u) => u.username === user.username)) {
-    return res.json({ message: "User already exists" });
-  } else {
-    USERS.push(user);
-    return res.json({ message: "User created" });
-  }
-});
-
-app.post("/users/login", userAuthentication, (req, res) => {
-  // logic to log in user
-  return res.json({ message: "Logged in successfully" });
-});
-
-app.get("/users/courses", userAuthentication, (req, res) => {
-  // logic to list all courses
-  return res.json({ courses: COURSES });
-});
-app.post("/users/courses/:courseId", userAuthentication, (req, res) => {
-  // logic to purchase a course
-  const courseId = parseInt(req.params.courseId);
-  const course = COURSES.find((c) => c.courseId === courseId);
-  if (course) {
-    req.user.purchasedCourses.push(course);
-    return res.json({ message: "Course purchased successfully" });
-  } else {
-    return res.status(404).json({ message: "course not found" });
-  }
-});
-
-app.get("/users/purchasedCourses", userAuthentication, (req, res) => {
-  // logic to view purchased courses
-  return res.json({ purchasedCourses: req.user.purchasedCourses });
-});
-
-app.listen(PORT, () => {
-  console.log("Server is listening on port 3000");
-});
+// Connect to MongoDB
+connectToDB(process.env.MONGO_URL)
+  .then(() => {
+    console.log("MongoDB connected.");
+  })
+  .catch((err) => {
+    console.log(`MongoDB Error : ${err}`);
+  });
+app.use("/admin", adminRouter);
+app.use("/users", userRouter);
+app.listen(3000, () => console.log("Server running on port 3000"));
