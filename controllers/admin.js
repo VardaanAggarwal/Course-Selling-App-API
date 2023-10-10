@@ -55,6 +55,11 @@ const handleGetAdminCourses = async (req, res) => {
   return res.json({ courses });
 };
 
+const handleGetCourseById = async (req, res) => {
+  const course = await Course.findById(req.params.courseId);
+  req.json({ course });
+};
+
 const handleMeRoute = (req, res) => {
   return res.json({
     username: req.user.username,
@@ -68,4 +73,5 @@ module.exports = {
   handleAdminLogIn,
   handleAdminCourses,
   handleMeRoute,
+  handleGetCourseById,
 };
