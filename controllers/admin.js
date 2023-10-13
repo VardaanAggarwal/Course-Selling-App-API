@@ -40,9 +40,7 @@ const handleAdminCourses = async (req, res) => {
 };
 
 const handleUpdateAdminCourse = async (req, res) => {
-  const course = await Course.findByIdAndUpdate(req.params.courseId, req.body, {
-    new: true,
-  });
+  const course = await Course.findByIdAndUpdate(req.params.courseId, req.body);
   if (course) {
     res.json({ message: "Course updated successfully" });
   } else {
@@ -57,7 +55,7 @@ const handleGetAdminCourses = async (req, res) => {
 
 const handleGetCourseById = async (req, res) => {
   const course = await Course.findById(req.params.courseId);
-  req.json({ course });
+  res.json({ course });
 };
 
 const handleMeRoute = (req, res) => {
