@@ -17,5 +17,5 @@ connectToDB(process.env.MONGO_URL)
     console.log(`MongoDB Error : ${err}`);
   });
 app.use("/admin", adminRouter);
-app.use("/users", userRouter);
+app.use("/user", userRouter);
 app.listen(3000, () => console.log("Server running on port 3000"));

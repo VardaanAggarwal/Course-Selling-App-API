@@ -64,6 +64,16 @@ const handleMeRoute = (req, res) => {
   });
 };
 
+const handleDeleteAdminCourse = async (req, res) => {
+  try {
+    const deletedCourse = await Course.deleteOne({ _id: req.params.courseId });
+    res.json({ message: deletedCourse });
+  } catch (error) {
+    console.log(error);
+    res.json({ error: error });
+  }
+};
+
 module.exports = {
   handleAdminSignUp,
   handleGetAdminCourses,
@@ -72,4 +82,5 @@ module.exports = {
   handleAdminCourses,
   handleMeRoute,
   handleGetCourseById,
+  handleDeleteAdminCourse,
 };

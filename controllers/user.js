@@ -68,10 +68,41 @@ const handleGetUserPurchasedCourses = async (req, res) => {
   }
 };
 
+const handleAddCourseToCart = async (req, res) => {
+  const course = await Course.findById(req.params.courseId);
+  // console.log(course);
+  if (course) {
+    const user = await User.findOne({ username: req.user.username });
+    if (user) {
+      user.coursesCart.push(course);
+      await user.save();
+      res.json({ message: "Course Added To Cart successfully" });
+    } else {
+      res.status(403).json({ message: "User not found" });
+    }
+  } else {
+    res.status(404).json({ message: "Course not found" });
+  }
+};
+
+const handleGetCoursesCart = async (req, res) => {
+  const user = await User.findOne({ username: req.user.username }).populate(
+    "coursesCart"
+  );
+  // console.log(user);
+  if (user) {
+    res.json({ coursesCart: user.coursesCart || [] });
+  } else {
+    res.status(403).json({ message: "User not found" });
+  }
+};
+
 module.exports = {
   handleUserSignUp,
   handleUserLogIn,
   handleGetUserCourses,
   handleUserPurchaseCourse,
   handleGetUserPurchasedCourses,
+  handleAddCourseToCart,
+  handleGetCoursesCart,
 };

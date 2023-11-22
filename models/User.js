@@ -10,6 +10,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  coursesCart: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+    },
+  ],
   purchasedCourses: [
     {
       type: mongoose.Schema.Types.ObjectId,

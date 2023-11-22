@@ -7,6 +7,7 @@ const {
   handleGetAdminCourses,
   handleMeRoute,
   handleGetCourseById,
+  handleDeleteAdminCourse,
 } = require("../controllers/admin.js");
 const { authenticateJwt } = require("../middlewares/authenticateJwt.js");
 const router = express.Router();
@@ -18,6 +19,8 @@ router.post("/login", handleAdminLogIn);
 router.post("/courses", authenticateJwt, handleAdminCourses);
 
 router.put("/courses/:courseId", authenticateJwt, handleUpdateAdminCourse);
+
+router.delete("/courses/:courseId", authenticateJwt, handleDeleteAdminCourse);
 
 router.get("/courses", authenticateJwt, handleGetAdminCourses);
 
