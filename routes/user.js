@@ -18,7 +18,7 @@ router.get("/courses", authenticateJwt, handleGetUserCourses);
 
 router.post("/courses/:courseId", authenticateJwt, handleUserPurchaseCourse);
 
-router.post("/add/cart", authenticateJwt, handleAddCourseToCart);
+router.post("/add/cart/:courseId", authenticateJwt, handleAddCourseToCart);
 
 router.get("/cart", authenticateJwt, handleGetCoursesCart);
 

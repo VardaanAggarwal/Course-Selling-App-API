@@ -35,7 +35,7 @@ const handleUserLogIn = async (req, res) => {
 };
 
 const handleGetUserCourses = async (req, res) => {
-  const courses = await Course.find({ published: true });
+  const courses = await Course.find();
   return res.json({ courses });
 };
 
