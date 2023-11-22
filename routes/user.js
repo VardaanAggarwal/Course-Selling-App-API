@@ -8,6 +8,7 @@ const {
   handleGetUserPurchasedCourses,
   handleGetCoursesCart,
   handleAddCourseToCart,
+  handlePurchaseCart,
 } = require("../controllers/user.js");
 const router = express.Router();
 router.post("/signup", handleUserSignUp);
@@ -21,6 +22,8 @@ router.post("/courses/:courseId", authenticateJwt, handleUserPurchaseCourse);
 router.post("/add/cart/:courseId", authenticateJwt, handleAddCourseToCart);
 
 router.get("/cart", authenticateJwt, handleGetCoursesCart);
+
+router.post("/cart/purchase", authenticateJwt, handlePurchaseCart);
 
 router.get("/purchasedCourses", authenticateJwt, handleGetUserPurchasedCourses);
 

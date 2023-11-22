@@ -41,7 +41,7 @@ const handleGetUserCourses = async (req, res) => {
 
 const handleUserPurchaseCourse = async (req, res) => {
   const course = await Course.findById(req.params.courseId);
-  console.log(course);
+  // console.log(course);
   if (course) {
     const user = await User.findOne({ username: req.user.username });
     if (user) {
@@ -60,7 +60,7 @@ const handleGetUserPurchasedCourses = async (req, res) => {
   const user = await User.findOne({ username: req.user.username }).populate(
     "purchasedCourses"
   );
-  console.log(user);
+  // console.log(user);
   if (user) {
     res.json({ purchasedCourses: user.purchasedCourses || [] });
   } else {
@@ -76,7 +76,10 @@ const handleAddCourseToCart = async (req, res) => {
     if (user) {
       user.coursesCart.push(course);
       await user.save();
-      res.json({ message: "Course Added To Cart successfully" });
+      res.json({
+        message: "Course Added To Cart successfully",
+        cart: user.coursesCart,
+      });
     } else {
       res.status(403).json({ message: "User not found" });
     }
@@ -97,6 +100,20 @@ const handleGetCoursesCart = async (req, res) => {
   }
 };
 
+const handlePurchaseCart = async (req, res) => {
+  const user = await User.findOne({ username: req.user.username });
+  if (user) {
+    user.purchasedCourses.push(...user.coursesCart);
+    await user.save();
+    res.json({
+      message: "Cart Transaction Successful !",
+      purchasedCourses: user.purchasedCourses,
+    });
+  } else {
+    res.status(403).json({ message: "User not found" });
+  }
+};
+
 module.exports = {
   handleUserSignUp,
   handleUserLogIn,
@@ -105,4 +122,5 @@ module.exports = {
   handleGetUserPurchasedCourses,
   handleAddCourseToCart,
   handleGetCoursesCart,
+  handlePurchaseCart,
 };

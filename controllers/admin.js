@@ -69,7 +69,7 @@ const handleDeleteAdminCourse = async (req, res) => {
     const deletedCourse = await Course.deleteOne({ _id: req.params.courseId });
     res.json({ message: deletedCourse });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.json({ error: error });
   }
 };
