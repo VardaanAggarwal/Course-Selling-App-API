@@ -70,7 +70,6 @@ const handleGetUserPurchasedCourses = async (req, res) => {
 
 const handleAddCourseToCart = async (req, res) => {
   const course = await Course.findById(req.params.courseId);
-  // console.log(course);
   if (course) {
     const user = await User.findOne({ username: req.user.username });
     if (user) {
@@ -92,7 +91,6 @@ const handleGetCoursesCart = async (req, res) => {
   const user = await User.findOne({ username: req.user.username }).populate(
     "coursesCart"
   );
-  // console.log(user);
   if (user) {
     res.json({ coursesCart: user.coursesCart || [] });
   } else {
@@ -114,6 +112,25 @@ const handlePurchaseCart = async (req, res) => {
   }
 };
 
+const handleDeleteCartCourse = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.user.username });
+
+    const courseId = req.params.courseId;
+
+    user.coursesCart = user.coursesCart.filter(
+      (course) => course._id.toString() !== courseId.toString()
+    );
+
+    await user.save();
+
+    return res.json({ message: "Course removed from cart." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   handleUserSignUp,
   handleUserLogIn,
@@ -123,4 +140,5 @@ module.exports = {
   handleAddCourseToCart,
   handleGetCoursesCart,
   handlePurchaseCart,
+  handleDeleteCartCourse,
 };

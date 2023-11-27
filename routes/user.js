@@ -9,6 +9,7 @@ const {
   handleGetCoursesCart,
   handleAddCourseToCart,
   handlePurchaseCart,
+  handleDeleteCartCourse,
 } = require("../controllers/user.js");
 const router = express.Router();
 router.post("/signup", handleUserSignUp);
@@ -26,5 +27,11 @@ router.get("/cart", authenticateJwt, handleGetCoursesCart);
 router.post("/cart/purchase", authenticateJwt, handlePurchaseCart);
 
 router.get("/purchasedCourses", authenticateJwt, handleGetUserPurchasedCourses);
+
+router.delete(
+  "/cart/delete/:courseId",
+  authenticateJwt,
+  handleDeleteCartCourse
+);
 
 module.exports = router;
